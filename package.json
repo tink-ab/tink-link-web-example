@@ -1,0 +1,19 @@
+{
+  "name": "tink-connect-example",
+  "version": "1.0.0",
+  "description": "An example app showing how to use the Tink API in a third-party app.",
+  "main": "server.js",
+  "scripts": {
+    "client": "cd client && npm start",
+    "server": "node server.js",
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "concurrently": "^3.5.1",
+    "express": "^4.16.2",
+    "node-fetch": "^2.0.0"
+  }
+}
