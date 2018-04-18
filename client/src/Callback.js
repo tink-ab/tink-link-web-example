@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Button, Col, Row} from "reactstrap";
 import Header from "./Header";
 import {formatDate, formatNumber} from "./FormatUtils";
+import Spinner from "./Spinner";
 
 class Main extends Component {
 
@@ -144,11 +145,31 @@ class Main extends Component {
         }
     }
 
-    render() {
+    getContent() {
         const currency = this.state.data ? this.state.data.response.userData.profile.currency : "";
         const accountsList = this.getAccountsListFromApiResponse(currency);
         const investmentList = this.getInvestmentDataFromApiResponse(currency);
         const transactionList = this.getTransactionDataFromApiResponse(currency);
+
+        if (accountsList && investmentList && transactionList) {
+            return (
+                <Row>
+                    <Col lg={{size: 6, offset: 3}}>
+                        {accountsList}
+                        {investmentList}
+                        {transactionList}
+                    </Col>
+                </Row>
+            )
+        } else if (this.state.error) {
+            return "";
+        } else {
+            return <Spinner width='50px' image={"./spinner.png"}/>;
+        }
+
+    }
+
+    render() {
 
         let header = "";
 
@@ -157,19 +178,13 @@ class Main extends Component {
         } else {
             header = <Header text="Something went wrong" emoji="sad"/>;
         }
+        const content = this.getContent();
 
         return (
             <div>
-
                 {header}
 
-                <Row>
-                    <Col lg={{size: 6, offset: 3}}>
-                        {accountsList}
-                        {investmentList}
-                        {transactionList}
-                    </Col>
-                </Row>
+                {content}
 
                 <p style={{fontSize: "18px", paddingTop: "40px"}}>{this.state.errorMessage}</p>
                 <Button style={{margin: "30px"}} href="/">Take me back</Button>
