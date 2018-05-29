@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import App from './App';
-import {BrowserRouter} from "react-router-dom"
-import registerServiceWorker from './registerServiceWorker';
+import { BrowserRouter } from "react-router-dom"
+import { unregister as unregisterServiceWorker } from './registerServiceWorker';
 
 ReactDOM.render(
     <BrowserRouter>
@@ -12,4 +12,4 @@ ReactDOM.render(
     </BrowserRouter>,
     document.getElementById('root'));
 
-registerServiceWorker();
+unregisterServiceWorker();
