@@ -6,7 +6,8 @@
   "scripts": {
     "client": "cd client && npm start",
     "server": "node server.js",
-    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "start": "npm run dev"
   },
   "author": "",
   "license": "ISC",
@@ -15,5 +16,8 @@
     "concurrently": "^3.5.1",
     "express": "^4.16.2",
     "node-fetch": "^2.0.0"
+  },
+  "devDependencies": {
+    "link-react-example": "file:client"
   }
 }
