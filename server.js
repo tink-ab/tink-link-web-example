@@ -12,7 +12,7 @@ app.get("/*", function (req, res) {
     res.sendFile(path.join(__dirname, "client/build", "index.html"));
 });
 
-const base = "https://www.tink.se/api/v1";
+const base = "https://api.tink.se/api/v1";
 
 // This is the server API, where the client can post a received OAuth code.
 app.post("/code", function (req, res) {
