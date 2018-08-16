@@ -6,7 +6,8 @@
   "scripts": {
     "client": "cd client && npm start",
     "server": "node server.js",
-    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "postinstall": "cd client && npm install"
   },
   "author": "",
   "license": "ISC",
