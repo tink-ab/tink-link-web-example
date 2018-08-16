@@ -38,7 +38,7 @@ export default class Main extends Component {
                 </div>
 
                 <div style={{padding: "10px 0 50px 0"}}>
-                    <BasicDropdown name="Choose a locale" items={["sv_SE", "en_US"]}
+                    <BasicDropdown name="Choose a locale" items={["en_US", "sv_SE", "da_DK", "no_NO", "fi_FI"]}
                                    onSelect={(value) => this.onSelectLocale(value)} style={{marginBottom: "30px"}}/>
                 </div>
 
