@@ -12,9 +12,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.18.2",
-    "concurrently": "^3.5.1",
-    "express": "^4.16.2",
-    "node-fetch": "^2.0.0"
+    "body-parser": "1.18.2",
+    "concurrently": "3.5.1",
+    "express": "4.16.2",
+    "node-fetch": "2.0.0"
   }
 }
