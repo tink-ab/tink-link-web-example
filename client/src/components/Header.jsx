@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import Emoji from "./Emoji";
 
 export default class Header extends Component {
-
     render() {
         return (
             <div style={{paddingBottom: "30px"}}>

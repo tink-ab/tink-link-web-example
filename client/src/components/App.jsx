@@ -8,7 +8,6 @@ class App extends Component {
     render() {
         return (
             <Container>
-
                 <Row>
                     <Col>
                         <a href="/" style={{textDecoration: "none", color: "inherit"}}>
@@ -27,7 +26,6 @@ class App extends Component {
 
                     </Col>
                 </Row>
-
             </Container>
         );
     }
