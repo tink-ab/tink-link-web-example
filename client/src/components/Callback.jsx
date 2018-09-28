@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Col, Row} from "reactstrap";
 import Header from "./Header";
-import {formatDate, formatNumber} from "./FormatUtils";
+import {formatDate, formatNumber} from "../utils/Format";
 import Spinner from "./Spinner";
 
 class Main extends Component {

@@ -3,7 +3,6 @@ import {Button} from "reactstrap";
 import PropTypes from 'prop-types';
 
 export default class AuthorizationLink extends Component {
-
     render() {
         const ssnData = this.props.ssn ? ("&input_username=" + this.props.ssn) : "";
         const link = "https://oauth.tink.se/0.4/authorize/?" +
