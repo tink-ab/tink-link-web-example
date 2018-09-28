@@ -46,7 +46,6 @@ async function getAccessToken(code) {
         code: code,
         client_id: "6745522a5cb6472587174d0b22ad2905",
         client_secret: process.env.CLIENT_SECRET, // Your OAuth client secret. Always handle the secret with care.
-        redirect_uri: "https://demo.tink.se/callback",
         grant_type: "authorization_code"
     };
 
