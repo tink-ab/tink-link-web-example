@@ -62,7 +62,7 @@ class Main extends Component {
         }
     }
 
-    getInvestmentDataFromApiResponse(currency) {
+    getInvestmentDataFromApiResponse() {
         const data = this.state.data;
         if (!data || !data.response || !data.response.investmentData || !data.response.investmentData.portfolios) {
             return undefined
@@ -81,9 +81,9 @@ class Main extends Component {
                 const instruments = portfolio.instruments.map(instrument => {
                     return (
                         <p key={instrument.id}><b>{instrument.name}</b><br/>
-                            Price: {formatNumber(instrument.price)} {currency}<br/>
+                            Price: {formatNumber(instrument.price)} {instrument.currency}<br/>
                             Quantity: {instrument.quantity}<br/>
-                            Profit: {formatNumber(instrument.profit)} {currency}
+                            Profit: {formatNumber(instrument.profit)} {instrument.currency}
                         </p>
                     );
                 });
@@ -148,7 +148,7 @@ class Main extends Component {
     getContent() {
         const currency = this.state.data ? this.state.data.response.userData.profile.currency : "";
         const accountsList = this.getAccountsListFromApiResponse(currency);
-        const investmentList = this.getInvestmentDataFromApiResponse(currency);
+        const investmentList = this.getInvestmentDataFromApiResponse();
         const transactionList = this.getTransactionDataFromApiResponse(currency);
 
         if (accountsList && investmentList && transactionList) {
