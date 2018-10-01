@@ -131,6 +131,10 @@ async function getCategoryData(token) {
   return response.json();
 }
 
+if (!process.env.CLIENT_SECRET) {
+  console.log('\x1b[33m%s\x1b[0m', 'Warning: CLIENT_SECRET environment variable not set');
+}
+
 // Start the server.
 const port = 8080;
 app.listen(port, function () {
