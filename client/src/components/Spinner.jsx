@@ -1,10 +1,13 @@
 import React from 'react';
 
-const Spinner = () => (
+const Spinner = ({
+  image,
+  width,
+}) => (
   <img
     className="spinner"
-    src={this.props.image}
-    style={{width: this.props.width}}
+    src={image}
+    style={{width: width}}
     alt={'Loading'}
   />
 );
