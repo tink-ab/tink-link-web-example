@@ -77,7 +77,6 @@ class Main extends Component {
             )
         } else {
             const portfolios = data.response.investmentData.portfolios.map(portfolio => {
-                let i = 0;
                 const instruments = portfolio.instruments.map(instrument => {
                     return (
                         <p key={instrument.id}><b>{instrument.name}</b><br/>
@@ -89,7 +88,7 @@ class Main extends Component {
                 });
 
                 return (
-                    <div key={++i}>
+                    <div key={portfolio.id}>
                         <h5>Portfolio ({portfolio.type})</h5>
                         {instruments}
                     </div>
