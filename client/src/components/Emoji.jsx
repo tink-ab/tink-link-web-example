@@ -1,37 +1,40 @@
-import React, {Component} from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-export default class Emoji extends Component {
+const Emoji = ({
+  type,
+}) => {
+  let emoji;
 
-    render() {
-        let emoji;
+  switch (type) {
+    case 'money':
+      emoji = '💰';
+      break;
+    case 'chart':
+      emoji = '📈';
+      break;
+    case 'wings-money':
+      emoji = '💸';
+      break;
+    case 'tada':
+      emoji = '🎉';
+      break;
+    case 'sad':
+      emoji = '😞';
+      break;
+    default:
+      emoji = '';
+  }
 
-        switch (this.props.type) {
-            case "money":
-                emoji = "💰";
-                break;
-            case "chart":
-                emoji = "📈";
-                break;
-            case "wings-money":
-                emoji = "💸";
-                break;
-            case "tada":
-                emoji = "🎉";
-                break;
-            case "sad":
-                emoji = "😞";
-                break;
-            default:
-                emoji = "";
-        }
-
-        return (
-            <h3><span role="img" aria-labelledby="jsx-a11y/accessible-emoji">{emoji}</span></h3>
-        );
-    }
-}
+  return (
+    <h3>
+      <span role="img" aria-labelledby="jsx-a11y/accessible-emoji">{emoji}</span>
+    </h3>
+  );
+};
 
 Emoji.propTypes = {
-    type: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
 };
+
+export default Emoji;
