@@ -25,7 +25,3 @@ $ npm run dev
 ```
 
 You should be redirected to the client app on `http://localhost:3000/`, but if you're not, just open that in your browser and you should see the example app.
-
-## Build for production
-
-Inside the `.buildkite` folder we have all the logic needed to deploy this app automatically. It downloads dependencies, builds the app and deploys it with `gcloud` to Google AppEngine.
