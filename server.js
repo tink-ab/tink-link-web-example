@@ -44,7 +44,7 @@ async function getData(accessToken) {
 async function getAccessToken(code) {
   const body = {
     code: code,
-    client_id: '6745522a5cb6472587174d0b22ad2905',
+    client_id: process.env.CLIENT_ID || '6745522a5cb6472587174d0b22ad2905', // Your OAuth client identifier.
     client_secret: process.env.CLIENT_SECRET, // Your OAuth client secret. Always handle the secret with care.
     grant_type: 'authorization_code',
   };
