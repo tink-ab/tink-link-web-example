@@ -46,9 +46,18 @@
 				"type": "text/plain"
 			},
 			"enabled": true
+		},
+		{
+			"key": "tink_oauth_icon_url",
+			"value": "http://localhost:3000/icon.png",
+			"description": {
+				"content": "",
+				"type": "text/plain"
+			},
+			"enabled": true
 		}
 	],
 	"_postman_variable_scope": "environment",
-	"_postman_exported_at": "2018-10-27T13:41:17.866Z",
+	"_postman_exported_at": "2018-10-27T17:25:55.854Z",
 	"_postman_exported_using": "Postman/6.4.4"
 }

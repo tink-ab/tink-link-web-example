@@ -80,6 +80,84 @@
 					"response": []
 				},
 				{
+					"name": "Update redirectUri",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "067f18aa-2ef5-4a7d-adec-7ec8cd7387c0",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"tink_oauth_client_id\", jsonData.id);",
+									"pm.environment.set(\"tink_oauth_secret\", jsonData.secret);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ad1095af-d995-4b6a-9e67-4cdc243b89ce",
+								"exec": [
+									"var chai = require('chai')",
+									"",
+									"chai.assert(pm.variables.get(\"tink_console_email\") !== \"YOUR_EMAIL\",",
+									"    \"Variable tink_console_email is still set to the default value. Set it e.g. by editing the Postman collection.\");",
+									"chai.assert(pm.variables.get(\"tink_console_password\") !== \"YOUR_PASSWORD\",",
+									"    \"Variable tink_console_password is still set to the default value. Set it e.g. by editing the Postman collection.\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{tink_console_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{tink_console_email}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"redirectUris\" : [\n\t\t\"demo://authorize\"\n\t],\n\t\"iconUrl\" : \"{{tink_oauth_icon_url}}\"\n}\n"
+						},
+						"url": {
+							"raw": "{{tink_api_host}}/api/v1/oauth/manager/client/{{tink_oauth_client_id}}",
+							"host": [
+								"{{tink_api_host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"oauth",
+								"manager",
+								"client",
+								"{{tink_oauth_client_id}}"
+							]
+						},
+						"description": "https://docs.tink.se/#getting-access"
+					},
+					"response": []
+				},
+				{
 					"name": "Create an authorization link",
 					"event": [
 						{
@@ -351,6 +429,21 @@
 									]
 								},
 								"description": "https://docs.tink.se/#list-accounts"
+							},
+							"response": []
+						},
+						{
+							"name": "test",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": ""
+								}
 							},
 							"response": []
 						}
