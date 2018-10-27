@@ -25,3 +25,12 @@ $ npm run dev
 ```
 
 You should be redirected to the client app on `http://localhost:3000/`, but if you're not, just open that in your browser and you should see the example app.
+
+## Explore the API with Postman
+
+1. Install Postman: https://www.getpostman.com/
+2. Import collection: [tink-public-api-environment_2018-10.postman_collection.json](tools/tink-public-api-environment_2018-10.postman_collection.json)
+3. Import environment: [tink-public-api_2018-10.postman_collection.json](tools/tink-public-api_2018-10.postman_collection.json)
+4. Modify environment variables to your personal configuration
+5. Use the methods in the `Authorize` folder to set up the token needed
+6. Use the methods in `API` folder to fetch the data! :tada:

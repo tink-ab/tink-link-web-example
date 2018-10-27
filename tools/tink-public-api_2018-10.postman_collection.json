@@ -1,0 +1,1224 @@
+{
+	"info": {
+		"_postman_id": "9f062ff1-4831-4c33-aa54-b6b7d29395c9",
+		"name": "Tink - Public API",
+		"description": "Example usages of Tink Public API based on https://console.tink.se/getting-started and https://docs.tink.se/",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authorization",
+			"item": [
+				{
+					"name": "Get your OAuth client details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "067f18aa-2ef5-4a7d-adec-7ec8cd7387c0",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody).clients;",
+									"pm.environment.set(\"tink_oauth_client_id\", jsonData[0].id);",
+									"pm.environment.set(\"tink_oauth_secret\", jsonData[0].secret);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ad1095af-d995-4b6a-9e67-4cdc243b89ce",
+								"exec": [
+									"var chai = require('chai')",
+									"",
+									"chai.assert(pm.variables.get(\"tink_console_email\") !== \"YOUR_EMAIL\",",
+									"    \"Variable tink_console_email is still set to the default value. Set it e.g. by editing the Postman collection.\");",
+									"chai.assert(pm.variables.get(\"tink_console_password\") !== \"YOUR_PASSWORD\",",
+									"    \"Variable tink_console_password is still set to the default value. Set it e.g. by editing the Postman collection.\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{tink_console_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{tink_console_email}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{tink_api_host}}/api/v1/oauth/manager/client",
+							"host": [
+								"{{tink_api_host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"oauth",
+								"manager",
+								"client"
+							]
+						},
+						"description": "https://console.tink.se/getting-started"
+					},
+					"response": []
+				},
+				{
+					"name": "Create an authorization link",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "a7e7cf4d-8b7f-42ad-aa03-ebaaf734f019",
+								"exec": [
+									"var chai = require('chai')",
+									"var isEmpty = function isEmpty(str) {",
+									"    return (!str || 0 === str.length);",
+									"}",
+									"",
+									"var tinkOauthClientId = pm.variables.get('tink_oauth_client_id');",
+									"chai.assert(!isEmpty(tinkOauthClientId), ",
+									"    'tink_oauth_client_id environment variable is not set');",
+									"",
+									"var tinkOauthRedirectUri = pm.variables.get('tink_oauth_redirect_uri');",
+									"chai.assert(!isEmpty(tinkOauthRedirectUri), ",
+									"    'tink_oauth_redirect_uri environment variable is not set');",
+									"",
+									"var tinkOauthScope = pm.variables.get('tink_oauth_scope');",
+									"chai.assert(!isEmpty(tinkOauthScope), ",
+									"    'tink_oauth_scope environment variable is not set');",
+									"",
+									"var tinkOauthInitiateAuthorizationUrl = 'https://oauth.tink.se/0.4/authorize/?' +",
+									"        'client_id=' + tinkOauthClientId + ",
+									"        '&redirect_uri=' + tinkOauthRedirectUri + ",
+									"        '&scope=' + tinkOauthScope;",
+									"",
+									"chai.assert(false, 'Open ' + tinkOauthInitiateAuthorizationUrl + ",
+									"        ' in your browser. Then use \"code\" located in the callback URL you are redirected to after authorization is done, by setting it to environment variable \"tink_oauth_code\".');"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://oauth.tink.se/0.4/authorize/?client_id={{tink_oauth_client_id}}&redirect_uri={{tink_oauth_redirect_uri}}&scope={{tink_oauth_scope}}",
+							"protocol": "https",
+							"host": [
+								"oauth",
+								"tink",
+								"se"
+							],
+							"path": [
+								"0.4",
+								"authorize",
+								""
+							],
+							"query": [
+								{
+									"key": "client_id",
+									"value": "{{tink_oauth_client_id}}"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "{{tink_oauth_redirect_uri}}"
+								},
+								{
+									"key": "scope",
+									"value": "{{tink_oauth_scope}}"
+								}
+							]
+						},
+						"description": "https://console.tink.se/getting-started"
+					},
+					"response": []
+				},
+				{
+					"name": "Exchange access tokens",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "8d42640b-3afd-4290-9a83-dd7a3424900e",
+								"exec": [
+									"var chai = require(\"chai\");",
+									"",
+									"var codeFormItem = pm.request.body.urlencoded.filter(function (formItem) { return formItem.key == \"code\" })[0].value",
+									"",
+									"chai.assert(codeFormItem.length >= 1, ",
+									"    'Form item \"code\" in Body needs to be set. Read more at: https://docs.tink.se/#exchange-access-tokens');"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b60400e-59be-438b-8ba6-26d4acaf1402",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"tink_oauth_access_token\", jsonData.access_token);",
+									"pm.environment.set(\"tink_oauth_refresh_token\", jsonData.refresh_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "client_id",
+									"value": "{{tink_oauth_client_id}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{tink_oauth_secret}}",
+									"type": "text"
+								},
+								{
+									"key": "code",
+									"value": "",
+									"description": "Set this field to the one-off-code you get after creating authorization link",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "authorization_code",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{tink_api_host}}/api/v1/oauth/token",
+							"host": [
+								"{{tink_api_host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"oauth",
+								"token"
+							]
+						},
+						"description": "https://docs.tink.se/#exchange-access-tokens"
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh access token",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "8d42640b-3afd-4290-9a83-dd7a3424900e",
+								"exec": [
+									"var chai = require(\"chai\");",
+									"",
+									"var codeFormItem = pm.request.body.urlencoded.filter(function (formItem) { return formItem.key == \"refresh_token\" })[0].value",
+									"",
+									"chai.assert(codeFormItem.length >= 1, ",
+									"    'Form item \"refresh_token\" in Body needs to be set. Read more at: https://docs.tink.se/#exchange-access-tokens');"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b60400e-59be-438b-8ba6-26d4acaf1402",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"tink_oauth_access_token\", jsonData.access_token);",
+									"pm.environment.set(\"tink_oauth_refresh_token\", jsonData.refresh_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "client_id",
+									"value": "{{tink_oauth_client_id}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{tink_oauth_secret}}",
+									"type": "text"
+								},
+								{
+									"key": "refresh_token",
+									"value": "{{tink_oauth_refresh_token}}",
+									"description": "This variable is set after exchanging the access tokens",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "refresh_token",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{tink_api_host}}/api/v1/oauth/token",
+							"host": [
+								"{{tink_api_host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"oauth",
+								"token"
+							]
+						},
+						"description": "https://docs.tink.se/#exchange-access-tokens"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "API",
+			"item": [
+				{
+					"name": "Account Service",
+					"item": [
+						{
+							"name": "List accounts",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{tink_api_host}}/api/v1/accounts/list",
+									"host": [
+										"{{tink_api_host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"accounts",
+										"list"
+									]
+								},
+								"description": "https://docs.tink.se/#list-accounts"
+							},
+							"response": []
+						}
+					],
+					"description": "https://docs.tink.se/#account-service",
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Category Service",
+					"item": [
+						{
+							"name": "List categories for a given locale",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{tink_api_host}}/api/v1/categories",
+									"host": [
+										"{{tink_api_host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"categories"
+									]
+								},
+								"description": "https://docs.tink.se/#list-categories-for-a-given-locale"
+							},
+							"response": []
+						}
+					],
+					"description": "https://docs.tink.se/#category-service",
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Credentials Service",
+					"item": [
+						{
+							"name": "List credentials",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "9684de6f-3d25-4792-b6bc-ddc205a6ecfa",
+										"exec": [
+											"var jsonData = JSON.parse(responseBody).credentials;",
+											"pm.environment.set(\"tink_credentials_id\", jsonData[0].id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{tink_api_host}}/api/v1/credentials/list",
+									"host": [
+										"{{tink_api_host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"credentials",
+										"list"
+									]
+								},
+								"description": "https://docs.tink.se/#list-credentials"
+							},
+							"response": []
+						},
+						{
+							"name": "Get credentials",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "39108ac0-9684-4382-882b-26c0d6d191e5",
+										"exec": [
+											"var chai = require('chai')",
+											"var isEmpty = function isEmpty(str) {",
+											"    return (!str || 0 === str.length);",
+											"}",
+											"",
+											"var credentialsId = pm.request.url.path[pm.request.url.path.length - 1];",
+											"",
+											"if (credentialsId === \"{{tink_credentials_id}}\") {",
+											"    chai.assert(!isEmpty(pm.variables.get(\"tink_credentials_id\")),",
+											"        \"Environment variable tink_credentials_id hasn't been set. Either set credentials id in URL manually or the environment variable, or do a List credentials request in order to autmatically set to the first credentials of the list.\")",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{tink_api_host}}/api/v1/credentials/{{tink_credentials_id}}",
+									"host": [
+										"{{tink_api_host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"credentials",
+										"{{tink_credentials_id}}"
+									]
+								},
+								"description": "https://docs.tink.se/#get-credentials"
+							},
+							"response": []
+						}
+					],
+					"description": "https://docs.tink.se/#credentials-service",
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Investment Service",
+					"item": [
+						{
+							"name": "List all the investments for a user",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{tink_api_host}}/api/v1/investments",
+									"host": [
+										"{{tink_api_host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"investments"
+									]
+								},
+								"description": "https://docs.tink.se/#list-all-the-investments-for-a-user"
+							},
+							"response": []
+						}
+					],
+					"description": "https://docs.tink.se/#investment-service",
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Loan Service",
+					"item": [
+						{
+							"name": "Get loans",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{tink_api_host}}/api/v1/loans",
+									"host": [
+										"{{tink_api_host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"loans"
+									]
+								},
+								"description": "https://docs.tink.se/#get-loans"
+							},
+							"response": []
+						},
+						{
+							"name": "List loan events",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{tink_api_host}}/api/v1/loans/events",
+									"host": [
+										"{{tink_api_host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"loans",
+										"events"
+									]
+								},
+								"description": "https://docs.tink.se/#list-loan-events"
+							},
+							"response": []
+						},
+						{
+							"name": "List loan history",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{tink_api_host}}/api/v1/loans/timelines",
+									"host": [
+										"{{tink_api_host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"loans",
+										"timelines"
+									]
+								},
+								"description": "https://docs.tink.se/#list-loan-history"
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Monitoring Service",
+					"item": [
+						{
+							"name": "Health check",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "f8fdb0be-1dd6-4988-8442-77da229f980a",
+										"exec": [
+											"pm.test(\"Service should be healthy\", function() {",
+											"    pm.response.to.be.success;",
+											"    pm.response.to.have.body(\"ok\");",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{tink_api_host}}/api/v1/monitoring/healthy",
+									"host": [
+										"{{tink_api_host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"monitoring",
+										"healthy"
+									]
+								},
+								"description": "https://docs.tink.se/#health-check"
+							},
+							"response": []
+						},
+						{
+							"name": "Ping",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "97d1449c-dad4-4c50-b84e-8fdf1f98f15e",
+										"exec": [
+											"pm.test(\"There is a pong\", function() {",
+											"    pm.response.to.be.success;",
+											"    pm.response.to.have.body(\"pong\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{tink_api_host}}/api/v1/monitoring/ping",
+									"host": [
+										"{{tink_api_host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"monitoring",
+										"ping"
+									]
+								},
+								"description": "https://docs.tink.se/#ping"
+							},
+							"response": []
+						}
+					],
+					"description": "https://docs.tink.se/#monitoring-service",
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Oauth Service",
+					"item": [
+						{
+							"name": "Get an authorization token (exchange tokens)",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "8d42640b-3afd-4290-9a83-dd7a3424900e",
+										"exec": [
+											"var chai = require(\"chai\");",
+											"",
+											"var codeFormItem = pm.request.body.urlencoded.filter(function (formItem) { return formItem.key == \"code\" })[0].value",
+											"",
+											"chai.assert(codeFormItem.length >= 1, ",
+											"    'Form item \"code\" in Body needs to be set. Read more at: https://docs.tink.se/#exchange-access-tokens');"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "6b60400e-59be-438b-8ba6-26d4acaf1402",
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"pm.environment.set(\"tink_oauth_access_token\", jsonData.access_token);",
+											"pm.environment.set(\"tink_oauth_refresh_token\", jsonData.refresh_token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "client_id",
+											"value": "{{tink_oauth_client_id}}",
+											"type": "text"
+										},
+										{
+											"key": "client_secret",
+											"value": "{{tink_oauth_secret}}",
+											"type": "text"
+										},
+										{
+											"key": "code",
+											"value": "",
+											"description": "Set this field to the one-off-code you get after creating authorization link",
+											"type": "text"
+										},
+										{
+											"key": "grant_type",
+											"value": "authorization_code",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{tink_api_host}}/api/v1/oauth/token",
+									"host": [
+										"{{tink_api_host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"oauth",
+										"token"
+									]
+								},
+								"description": "https://docs.tink.se/#exchange-access-tokens"
+							},
+							"response": []
+						},
+						{
+							"name": "Get an authorization token (refresh token)",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "8d42640b-3afd-4290-9a83-dd7a3424900e",
+										"exec": [
+											"var chai = require(\"chai\");",
+											"",
+											"var codeFormItem = pm.request.body.urlencoded.filter(function (formItem) { return formItem.key == \"refresh_token\" })[0].value",
+											"",
+											"chai.assert(codeFormItem.length >= 1, ",
+											"    'Form item \"refresh_token\" in Body needs to be set. Read more at: https://docs.tink.se/#exchange-access-tokens');"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "6b60400e-59be-438b-8ba6-26d4acaf1402",
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"pm.environment.set(\"tink_oauth_access_token\", jsonData.access_token);",
+											"pm.environment.set(\"tink_oauth_refresh_token\", jsonData.refresh_token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "client_id",
+											"value": "{{tink_oauth_client_id}}",
+											"type": "text"
+										},
+										{
+											"key": "client_secret",
+											"value": "{{tink_oauth_secret}}",
+											"type": "text"
+										},
+										{
+											"key": "refresh_token",
+											"value": "{{tink_oauth_refresh_token}}",
+											"description": "This variable is set after exchanging the access tokens",
+											"type": "text"
+										},
+										{
+											"key": "grant_type",
+											"value": "refresh_token",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{tink_api_host}}/api/v1/oauth/token",
+									"host": [
+										"{{tink_api_host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"oauth",
+										"token"
+									]
+								},
+								"description": "https://docs.tink.se/#exchange-access-tokens"
+							},
+							"response": []
+						}
+					],
+					"description": "https://docs.tink.se/#oauth-service",
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Provider Service",
+					"item": [
+						{
+							"name": "List providers by market",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Tink-OAuth-Client-ID",
+										"value": "{{tink_oauth_client_id}}",
+										"description": "No bearer required, since providers is tied to the client",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{tink_api_host}}/api/v1/providers/se",
+									"host": [
+										"{{tink_api_host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"providers",
+										"se"
+									]
+								},
+								"description": "https://docs.tink.se/#list-providers-by-market"
+							},
+							"response": []
+						}
+					],
+					"description": "https://docs.tink.se/#provider-service",
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Search Service",
+					"item": [
+						{
+							"name": "Query transactions",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "f024d30b-310e-4389-9b8e-b58e926763bc",
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"",
+											"if (jsonData.count > 0) {",
+											"    pm.environment.set(\"tink_transaction_id\", jsonData.results[0].transaction.id);",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"accounts\": [],\n  \"categories\": [],\n  \"credentials\": [\n    \"{{tink_credentials_id}}\"\n  ],\n  \"endDate\": null,\n  \"externalIds\": [],\n  \"includeUpcoming\": false,\n  \"limit\": 20,\n  \"offset\": 0,\n  \"order\": \"ASC\",\n  \"sort\": \"DATE\",\n  \"startDate\": null\n}"
+								},
+								"url": {
+									"raw": "{{tink_api_host}}/api/v1/search",
+									"host": [
+										"{{tink_api_host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"search"
+									]
+								},
+								"description": "https://docs.tink.se/#query-transactions"
+							},
+							"response": []
+						}
+					],
+					"description": "https://docs.tink.se/#search-service",
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Statistics Service",
+					"item": [
+						{
+							"name": "Query statistics",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"periods\": [\n    \"2018-10\"\n  ],\n  \"resolution\": \"MONTHLY_ADJUSTED\",\n  \"types\": [\n    \"left-to-spend-average\"\n  ]\n}"
+								},
+								"url": {
+									"raw": "{{tink_api_host}}/api/v1/statistics/query",
+									"host": [
+										"{{tink_api_host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"statistics",
+										"query"
+									]
+								},
+								"description": "https://docs.tink.se/#query-statistics"
+							},
+							"response": []
+						}
+					],
+					"description": "https://docs.tink.se/#statistics-service",
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Transaction service",
+					"item": [
+						{
+							"name": "Get one transaction",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "20467ee1-ecb2-4de4-8b07-cf69aaf71b61",
+										"exec": [
+											"var chai = require('chai')",
+											"var isEmpty = function isEmpty(str) {",
+											"    return (!str || 0 === str.length);",
+											"}",
+											"",
+											"var transactionId = pm.request.url.path[pm.request.url.path.length - 1];",
+											"",
+											"if (transactionId === \"{{tink_transaction_id}}\") {",
+											"    chai.assert(!isEmpty(pm.variables.get(\"tink_transaction_id\")),",
+											"        \"Environment variable tink_transaction_id hasn't been set. Either set transactions id in URL manually or the environment variable, or do a Query transactions request in order to autmatically set to the first transaction of the list.\")",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{tink_api_host}}/api/v1/transactions/{{tink_transaction_id}}",
+									"host": [
+										"{{tink_api_host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"transactions",
+										"{{tink_transaction_id}}"
+									]
+								},
+								"description": "https://docs.tink.se/#get-one-transaction"
+							},
+							"response": []
+						},
+						{
+							"name": "Get similar transactions",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "a49449ea-076e-49d1-ab87-573d989027d3",
+										"exec": [
+											"var chai = require('chai')",
+											"var isEmpty = function isEmpty(str) {",
+											"    return (!str || 0 === str.length);",
+											"}",
+											"",
+											"var transactionId = pm.request.url.path[pm.request.url.path.length - 2];",
+											"",
+											"if (transactionId === \"{{tink_transaction_id}}\") {",
+											"    chai.assert(!isEmpty(pm.variables.get(\"tink_transaction_id\")),",
+											"        \"Environment variable tink_transaction_id hasn't been set. Either set transactions id in URL manually or the environment variable, or do a Query transactions request in order to autmatically set to the first transaction of the list.\")",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{tink_api_host}}/api/v1/transactions/{{tink_transaction_id}}/similar",
+									"host": [
+										"{{tink_api_host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"transactions",
+										"{{tink_transaction_id}}",
+										"similar"
+									]
+								},
+								"description": "https://docs.tink.se/#get-similar-transactions"
+							},
+							"response": []
+						}
+					],
+					"description": "https://docs.tink.se/#transaction-service",
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "User Service",
+					"item": [
+						{
+							"name": "Get the user",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{tink_api_host}}/api/v1/user",
+									"host": [
+										"{{tink_api_host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user"
+									]
+								},
+								"description": "https://docs.tink.se/#get-the-user"
+							},
+							"response": []
+						},
+						{
+							"name": "Get the user profile",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{tink_api_host}}/api/v1/user/profile",
+									"host": [
+										"{{tink_api_host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"profile"
+									]
+								},
+								"description": "https://docs.tink.se/#get-the-user-profile"
+							},
+							"response": []
+						}
+					],
+					"description": "https://docs.tink.se/#user-service",
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Version Service",
+					"item": [
+						{
+							"name": "Get the version",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{tink_api_host}}/api/v1/version",
+									"host": [
+										"{{tink_api_host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"version"
+									]
+								},
+								"description": "https://docs.tink.se/#get-the-version"
+							},
+							"response": []
+						}
+					],
+					"description": "https://docs.tink.se/#version-service",
+					"_postman_isSubFolder": true
+				}
+			],
+			"description": "https://docs.tink.se/#api-reference",
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{tink_oauth_access_token}}",
+						"type": "string"
+					}
+				]
+			}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "0c8964bc-a5be-40e6-88f2-a22d82adf601",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "4fff0f09-254b-443a-b60a-956f913cccbf",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

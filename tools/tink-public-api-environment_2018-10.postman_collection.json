@@ -1,0 +1,54 @@
+{
+	"id": "715b1cc8-8d1e-4428-96f9-7eda4060f6d6",
+	"name": "Tink - Public API Environment",
+	"values": [
+		{
+			"key": "tink_api_host",
+			"value": "https://api.tink.se",
+			"description": {
+				"content": "",
+				"type": "text/plain"
+			},
+			"enabled": true
+		},
+		{
+			"key": "tink_console_email",
+			"value": "YOUR_EMAIL",
+			"description": {
+				"content": "",
+				"type": "text/plain"
+			},
+			"enabled": true
+		},
+		{
+			"key": "tink_console_password",
+			"value": "YOUR_PASSWORD",
+			"description": {
+				"content": "",
+				"type": "text/plain"
+			},
+			"enabled": true
+		},
+		{
+			"key": "tink_market",
+			"value": "se",
+			"description": {
+				"content": "",
+				"type": "text/plain"
+			},
+			"enabled": true
+		},
+		{
+			"key": "tink_oauth_redirect_uri",
+			"value": "http://localhost:3000/callback",
+			"description": {
+				"content": "",
+				"type": "text/plain"
+			},
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2018-10-27T13:41:17.866Z",
+	"_postman_exported_using": "Postman/6.4.4"
+}
