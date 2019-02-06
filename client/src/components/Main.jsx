@@ -38,7 +38,7 @@ export default class Main extends React.Component {
 
         <div style={{padding: '50px 0 10px 0'}}>
           <BasicDropdown
-            name="Choose a market" items={['SE', 'FI', 'NO', 'DK']}
+            name="Choose a market" items={['AT', 'BE', 'DE', 'DK', 'ES', 'FI', 'GB', 'NO', 'SE']}
             onSelect={(value) => this.onSelectMarket(value)} style={{marginBottom: '30px'}}
           />
         </div>
