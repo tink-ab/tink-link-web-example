@@ -4,6 +4,9 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const fetch = require('node-fetch');
 
+const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
+const CLIENT_SECRET = process.env.REACT_APP_CLIENT_SECRET;
+
 app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(bodyParser.json());
 
@@ -15,7 +18,7 @@ app.get('/*', function (req, res) {
 const base = 'https://api.tink.se/api/v1';
 
 // This is the server API, where the client can post a received OAuth code.
-app.post('/code', function (req, res) {
+app.post('/callback', function (req, res) {
   getAccessToken(req.body.code).then(function (response) {
 
     getData(response.access_token).then(function (response) {
@@ -44,8 +47,8 @@ async function getData(accessToken) {
 async function getAccessToken(code) {
   const body = {
     code: code,
-    client_id: process.env.CLIENT_ID || '6745522a5cb6472587174d0b22ad2905', // Your OAuth client identifier.
-    client_secret: process.env.CLIENT_SECRET, // Your OAuth client secret. Always handle the secret with care.
+    client_id: CLIENT_ID, // Your OAuth client identifier.
+    client_secret: CLIENT_SECRET, // Your OAuth client secret. Always handle the secret with care.
     grant_type: 'authorization_code',
   };
 
@@ -131,8 +134,12 @@ async function getCategoryData(token) {
   return response.json();
 }
 
-if (!process.env.CLIENT_SECRET) {
-  console.log('\x1b[33m%s\x1b[0m', 'Warning: CLIENT_SECRET environment variable not set');
+if (!CLIENT_ID) {
+  console.log('\x1b[33m%s\x1b[0m', 'Warning: REACT_APP_CLIENT_ID environment variable not set');
+}
+
+if (!CLIENT_SECRET) {
+  console.log('\x1b[33m%s\x1b[0m', 'Warning: REACT_APP_CLIENT_SECRET environment variable not set');
 }
 
 // Start the server.
