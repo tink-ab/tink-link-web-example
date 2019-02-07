@@ -11,7 +11,7 @@ class Main extends React.Component {
     data: undefined,
   };
   getData = async (code) => {
-    const response = await fetch('/code', {
+    const response = await fetch('/callback', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({code: code}),
