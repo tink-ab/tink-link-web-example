@@ -21,7 +21,7 @@ Set your client identifier and client secret into the following environment vari
 
 ```
 $ export REACT_APP_CLIENT_ID="<YOUR_CLIENT_ID>"
-$ export REACT_APP_CLIENT_SECERT="<YOUR_CLIENT_SECRET>"
+$ export REACT_APP_CLIENT_SECRET="<YOUR_CLIENT_SECRET>"
 ```
 
 Run both the backend (`server.js`) and the frontend (`client` folder) concurrently:
