@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dropdown,
   DropdownItem,
@@ -10,14 +10,13 @@ import PropTypes from "prop-types";
 export const BasicDropdown = ({ items, name, onSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [value, setValue] = useState(name);
-
   const toggle = () => setIsOpen(!isOpen);
+  const select = ({ target: { innerText: value } }) => setValue(value);
 
-  const select = ({ target: { innerText: value } }) => {
-    setValue(value);
-    toggle();
+  useEffect(() => {
+    setIsOpen(false);
     onSelect(value);
-  };
+  }, [value]);
 
   const dropdownItems = items.map(item => (
     <DropdownItem onClick={select} key={item}>

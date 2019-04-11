@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const emojis = {
+export const emojis = {
   money: "💰",
   chart: "📈",
   "wings-money": "💸",

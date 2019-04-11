@@ -1,98 +1,30 @@
-import React, { useState, useEffect } from "react";
-import { Button, Col, Row } from "reactstrap";
-import Header from "./Header";
-import Spinner from "./Spinner";
-import AccountsList from "./AccountsList";
-import Investments from "./Investments";
-import Transactions from "./Transactions";
+import React from "react";
+import { Button } from "reactstrap";
+import ReactRouterPropTypes from "react-router-prop-types";
+import { Header } from "./Header";
+import { FinancialOverview } from "./FinancialOverview";
+import { useCallback } from "../hooks/useCallback";
 
-export const Main = ({ location: { search } }) => {
-  const [state, setState] = useState({
-    code: new URLSearchParams(search).get("code"),
-    token: new URLSearchParams(search).get("error"),
-    errorMessage: new URLSearchParams(search).get("message"),
-    data: undefined,
-    error: undefined,
-    loading: false
-  });
-
-  useEffect(() => {
-    async function getData(code) {
-      try {
-        setState({
-          ...state,
-          loading: true
-        });
-        const response = await fetch("/callback", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ code: code })
-        });
-
-        const data = await response.json();
-
-        if (response.status === 200) {
-          return setState({
-            ...state,
-            loading: false,
-            data
-          });
-        }
-
-        return setState({
-          ...state,
-          loading: false,
-          error: data.message
-        });
-      } catch (error) {
-        return setState({
-          ...state,
-          loading: false,
-          error: error.toString()
-        });
+const getHeaderProps = error =>
+  error
+    ? {
+        text: "Something went wrong",
+        emoji: "sad"
       }
-    }
+    : {
+        text: "Your bank was successfully connected!",
+        emoji: "tada"
+      };
 
-    if (state.code) {
-      getData(state.code);
-    }
-  }, []);
-
-  const renderContent = () => {
-    if (state.error) {
-      return <noscript />;
-    }
-
-    if (state.loading) {
-      return <Spinner width="50px" image={"./spinner.png"} />;
-    }
-
-    if (!state.data) {
-      return <noscript />;
-    }
-
-    return (
-      <Row>
-        <Col lg={{ size: 6, offset: 3 }}>
-          <AccountsList data={state.data} />
-          <Investments data={state.data} />
-          <Transactions data={state.data} />
-        </Col>
-      </Row>
-    );
-  };
+export const Callback = ({ location }) => {
+  const { loading, error, data, message } = useCallback(location);
+  const headerProps = getHeaderProps(error);
 
   return (
     <div>
-      {state.error ? (
-        <Header text="Something went wrong" emoji="sad" />
-      ) : (
-        <Header text="Your bank was successfully connected!" emoji="tada" />
-      )}
-      {renderContent()}
-      <p style={{ fontSize: "18px", paddingTop: "40px" }}>
-        {state.errorMessage}
-      </p>
+      <Header {...headerProps} />
+      <FinancialOverview loading={loading} data={data} error={error} />
+      <p style={{ fontSize: "18px", paddingTop: "40px" }}>{message}</p>
       <Button style={{ margin: "30px" }} href="/">
         Take me back
       </Button>
@@ -100,4 +32,8 @@ export const Main = ({ location: { search } }) => {
   );
 };
 
-export default Main;
+Callback.propTypes = {
+  location: ReactRouterPropTypes.location.isRequired
+};
+
+export default Callback;

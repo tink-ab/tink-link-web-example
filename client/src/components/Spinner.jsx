@@ -1,14 +1,11 @@
-import React from 'react';
+import React from "react";
 
-const Spinner = ({
-  image,
-  width,
-}) => (
+export const Spinner = ({ image, width }) => (
   <img
     className="spinner"
     src={image}
-    style={{width: width}}
-    alt={'Loading'}
+    style={{ width: width }}
+    alt={"Loading"}
   />
 );
 

@@ -4,8 +4,8 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const fetch = require("node-fetch");
 
-const CLIENT_ID = "caa13671e6e1491e98ec00dc823043ff";
-const CLIENT_SECRET = "fd9df61482eb4ddeadb74587ae11520d";
+const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
+const CLIENT_SECRET = process.env.REACT_APP_CLIENT_SECRET;
 
 app.use(express.static(path.join(__dirname, "client/build")));
 app.use(bodyParser.json());

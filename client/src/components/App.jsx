@@ -1,10 +1,10 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import Callback from "./Callback";
 import { Col, Container, Row } from "reactstrap";
-import Main from "./Main";
+import { Callback } from "./Callback";
+import { Main } from "./Main";
 
-const App = () => (
+export const App = () => (
   <Container>
     <Row>
       <Col>

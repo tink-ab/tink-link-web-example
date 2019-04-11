@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Header from "./Header";
-import AuthorizationLink from "./AuthorizationLink";
+import { Header } from "./Header";
+import { AuthorizationLink } from "./AuthorizationLink";
 import { BasicDropdown } from "./BasicDropdown";
 
-const Main = () => {
+export const Main = () => {
   const [market, setMarket] = useState("SE");
   const [locale, setLocale] = useState("en_US");
   return (
