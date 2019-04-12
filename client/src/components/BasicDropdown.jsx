@@ -1,54 +1,41 @@
-import React from 'react';
-import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect } from "react";
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle
+} from "reactstrap";
+import PropTypes from "prop-types";
 
-export class BasicDropdown extends React.Component {
-  constructor(props) {
-    super(props);
+export const BasicDropdown = ({ items, name, onSelect }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [value, setValue] = useState(name);
+  const toggle = () => setIsOpen(!isOpen);
+  const select = ({ target: { innerText: value } }) => setValue(value);
 
-    this.toggle = this.toggle.bind(this);
-    this.state = {
-      dropdownOpen: false,
-      value: this.props.name,
-    };
-  }
+  useEffect(() => {
+    setIsOpen(false);
+    onSelect(value);
+  }, [value]);
 
-  toggle() {
-    this.setState({
-      dropdownOpen: !this.state.dropdownOpen,
-    });
-  }
+  const dropdownItems = items.map(item => (
+    <DropdownItem onClick={select} key={item}>
+      {item}
+    </DropdownItem>
+  ));
 
-  select(event) {
-    const value = event.target.innerText;
-    this.setState({
-      dropdownOpen: !this.state.dropdownOpen,
-      value: value,
-    });
-    this.props.onSelect(value);
-  }
-
-  render() {
-    const dropdownItems = [];
-    this.props.items.forEach((item) => {
-      dropdownItems.push(<DropdownItem onClick={(event) => this.select(event)} key={item}>{item}</DropdownItem>);
-    });
-
-    return (
-      <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-        <DropdownToggle caret>
-          {this.state.value}
-        </DropdownToggle>
-        <DropdownMenu>
-          {dropdownItems}
-        </DropdownMenu>
-      </Dropdown>
-    );
-  }
-}
+  return (
+    <Dropdown isOpen={isOpen} toggle={toggle}>
+      <DropdownToggle caret>{value}</DropdownToggle>
+      <DropdownMenu>{dropdownItems}</DropdownMenu>
+    </Dropdown>
+  );
+};
 
 Dropdown.PropTypes = {
   items: PropTypes.array.isRequired,
   name: PropTypes.string.isRequired,
-  onSelect: PropTypes.func.isRequired,
+  onSelect: PropTypes.func.isRequired
 };
+
+export default Dropdown;
