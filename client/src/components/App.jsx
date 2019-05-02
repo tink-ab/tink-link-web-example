@@ -8,9 +8,9 @@ export const App = () => (
   <Container>
     <Row>
       <Col>
-        <a href="/" style={{ textDecoration: "none", color: "inherit" }}>
+        <a href="/" style={{ textDecoration: "none", color: "inherit", display: 'inline-flex', alignItems: 'center', marginTop: 15 }}>
           <span className="circle" />
-          <h2 style={{ display: "inline", textAlign: "top" }}>Example</h2>
+          <h2 style={{ margin: 0 }}>Example</h2>
         </a>
       </Col>
     </Row>
