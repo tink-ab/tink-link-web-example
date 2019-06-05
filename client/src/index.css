@@ -38,6 +38,7 @@ a.btn.btn-secondary {
 .circle:before {
   content: '\25CF';
   font-size: 60px;
+  line-height: 1;
   text-align: left;
   color: #cf6a87;
   padding-right: 10px;

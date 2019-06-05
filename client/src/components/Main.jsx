@@ -29,7 +29,7 @@ export const Main = () => {
       <div style={{ padding: "10px 0 50px 0" }}>
         <BasicDropdown
           name="Choose a locale"
-          items={["en_US", "sv_SE", "da_DK", "no_NO", "fi_FI"]}
+          items={["en_US", "sv_SE", "da_DK", "no_NO", "fi_FI", "de_DE", "es_ES", "fr_FR"]}
           onSelect={setLocale}
           style={{ marginBottom: "30px" }}
         />
