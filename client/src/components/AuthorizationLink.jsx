@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 export const AuthorizationLink = ({ locale, market, scope, ssn }) => {
   const ssnData = ssn ? "&input_username=" + ssn : "";
   const link =
-    "https://oauth.tink.com/0.4/authorize/?" +
+    "https://link.tink.com/1.0/authorize/?" +
     "client_id=" +
     process.env.REACT_APP_CLIENT_ID +
     "&redirect_uri=http://localhost:3000/callback" +
