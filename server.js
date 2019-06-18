@@ -58,8 +58,7 @@ async function getAccessToken(code) {
   const body = {
     code: code,
     client_id: CLIENT_ID, // Your OAuth client identifier.
-    client_secret: CLIENT_SECRET, // Your OAuth client secret. Always handle the secret with care.
-    grant_type: "authorization_code"
+    client_secret: CLIENT_SECRET // Your OAuth client secret. Always handle the secret with care.
   };
 
   const response = await fetch(base + "/oauth/token", {

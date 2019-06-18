@@ -12,7 +12,6 @@ export const AuthorizationLink = ({ locale, market, scope, ssn }) => {
     "&scope=" +
     scope +
     ssnData +
-    "&grant_type=authorization_code" +
     "&market=" +
     market +
     "&locale=" +
