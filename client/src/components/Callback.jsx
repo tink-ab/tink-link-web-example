@@ -17,7 +17,8 @@ const getHeaderProps = error =>
       };
 
 export const Callback = ({ location }) => {
-  const { loading, error, data, message } = useCallback(location);
+  const { loading, error, data } = useCallback(location);
+  const message = new URLSearchParams(location).get("message");
   const headerProps = getHeaderProps(error);
 
   return (
