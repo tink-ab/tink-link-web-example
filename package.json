@@ -7,7 +7,7 @@
   "scripts": {
     "client": "cd client && npm start",
     "server": "node server.js",
-    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "dev": "concurrently --kill-others-on-fail \"nodemon server.js\" \"npm run client\"",
     "postinstall": "cd client && npm install"
   },
   "author": "",
@@ -17,5 +17,8 @@
     "concurrently": "4.1.0",
     "express": "4.16.4",
     "node-fetch": "2.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "1.19.1"
   }
 }
