@@ -8,13 +8,21 @@ export const App = () => (
   <Container>
     <Row>
       <Col>
-        <a href="/" style={{ textDecoration: "none", color: "inherit", display: 'inline-flex', alignItems: 'center', marginTop: 15 }}>
+        <a
+          href="/"
+          style={{
+            textDecoration: "none",
+            color: "inherit",
+            display: "inline-flex",
+            alignItems: "center",
+            marginTop: 15
+          }}
+        >
           <span className="circle" />
           <h2 style={{ margin: 0 }}>Example</h2>
         </a>
       </Col>
     </Row>
-
     <Row className="app">
       <Col lg={{ size: 8, offset: 2 }} style={{ paddingTop: "70px" }}>
         <Switch>

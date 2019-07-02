@@ -33,7 +33,7 @@ export const FinancialOverview = ({ data, error, loading }) => {
 FinancialOverview.propTypes = {
   loading: PropTypes.bool.isRequired,
   data: PropTypes.object,
-  error: PropTypes.object
+  error: PropTypes.string
 };
 
 export default FinancialOverview;

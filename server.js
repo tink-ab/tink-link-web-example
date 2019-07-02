@@ -20,15 +20,25 @@ const base = "https://api.tink.se/api/v1";
 // This is the server API, where the client can post a received OAuth code.
 app.post("/callback", function(req, res) {
   getAccessToken(req.body.code)
-    .then(function(response) {
-      getData(response.access_token)
-        .then(function(response) {
-          res.send(JSON.stringify({ response: response }));
-        })
-        .catch(err => console.log(err));
+    .then(response => getData(response.access_token))
+    .then(response => {
+      res.json({
+        response
+      });
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ message: err.toString() });
+    });
 });
+
+async function handleResponse(response) {
+  const json = await response.json();
+  if (response.status !== 200) {
+    throw new Error(json.errorMessage);
+  }
+  return json;
+}
 
 async function getData(accessToken) {
   const [
@@ -58,7 +68,8 @@ async function getAccessToken(code) {
   const body = {
     code: code,
     client_id: CLIENT_ID, // Your OAuth client identifier.
-    client_secret: CLIENT_SECRET // Your OAuth client secret. Always handle the secret with care.
+    client_secret: CLIENT_SECRET, // Your OAuth client secret. Always handle the secret with care.
+    grant_type: "authorization_code"
   };
 
   const response = await fetch(base + "/oauth/token", {
@@ -71,10 +82,7 @@ async function getAccessToken(code) {
     }
   });
 
-  if (response.status !== 200) {
-    throw Error(response.status);
-  }
-  return response.json();
+  return handleResponse(response);
 }
 
 async function getUserData(token) {
@@ -84,10 +92,7 @@ async function getUserData(token) {
     }
   });
 
-  if (response.status !== 200) {
-    throw Error(response.status);
-  }
-  return response.json();
+  return handleResponse(response);
 }
 
 async function getAccountData(token) {
@@ -98,10 +103,7 @@ async function getAccountData(token) {
     }
   });
 
-  if (response.status !== 200) {
-    throw Error(response.status);
-  }
-  return response.json();
+  return handleResponse(response);
 }
 
 async function getInvestmentData(token) {
@@ -112,10 +114,7 @@ async function getInvestmentData(token) {
     }
   });
 
-  if (response.status !== 200) {
-    throw Error(response.status);
-  }
-  return response.json();
+  return handleResponse(response);
 }
 
 async function getTransactionData(token) {
@@ -128,10 +127,7 @@ async function getTransactionData(token) {
     body: JSON.stringify({ limit: 5 })
   });
 
-  if (response.status !== 200) {
-    throw Error(response.status);
-  }
-  return response.json();
+  return handleResponse(response);
 }
 
 async function getCategoryData(token) {
@@ -141,10 +137,7 @@ async function getCategoryData(token) {
     }
   });
 
-  if (response.status !== 200) {
-    throw Error(response.status);
-  }
-  return response.json();
+  return handleResponse(response);
 }
 
 if (!CLIENT_ID) {

@@ -16,7 +16,7 @@ export const BasicDropdown = ({ items, name, onSelect }) => {
   useEffect(() => {
     setIsOpen(false);
     onSelect(value);
-  }, [value]);
+  }, [value, onSelect]);
 
   const dropdownItems = items.map(item => (
     <DropdownItem onClick={select} key={item}>
