@@ -17,7 +17,7 @@ The application requires a Tink API developer account.
 
 1. Create your developer account at [Tink Console](https://console.tink.com)
 2. Follow the [getting started guide](https://docs.tink.com/resources/getting-started/set-up-your-account) to retrieve your `client_id` and `client_secret`
-3. Register the redirect URI for the example app (`http://localhost:3000/callback`) in the [list of allowed redirect URIs](https://console.tink.com/apps)
+3. Register the redirect URI for the example app (`http://localhost:3000/callback`) in the [list of redirect URIs under your app's settings](https://console.tink.com/overview)
 
 ### Structure
 
