@@ -20,7 +20,20 @@ export const Main = () => {
       <div style={{ padding: "50px 0 10px 0" }}>
         <BasicDropdown
           name="Choose a market"
-          items={["AT", "BE", "DE", "DK", "ES", "FI", "GB", "NO", "SE"]}
+          items={[
+            "AT",
+            "BE",
+            "DE",
+            "DK",
+            "ES",
+            "FI",
+            "GB",
+            "IT",
+            "NL",
+            "NO",
+            "PT",
+            "SE"
+          ]}
           onSelect={setMarket}
           style={{ marginBottom: "30px" }}
         />
