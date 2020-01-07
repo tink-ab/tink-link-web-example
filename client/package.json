@@ -11,7 +11,7 @@
     "react-router-prop-types": "^1.0.4",
     "react-scripts": "3.3.0",
     "react-transition-group": "2.9.0",
-    "reactstrap": "8.0.0"
+    "reactstrap": "8.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
