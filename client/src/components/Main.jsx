@@ -61,7 +61,7 @@ export const Main = () => {
       </div>
 
       <AuthorizationLink
-        scope="accounts:read,transactions:read,investments:read,user:read"
+        scope="accounts:read,transactions:read,investments:read,user:read,credentials:read"
         market={market}
         locale={locale}
       />

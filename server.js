@@ -17,10 +17,22 @@ app.get("/*", function(req, res) {
 
 const base = "https://api.tink.se/api/v1";
 
+app.post("/backend/access-token", async function(req, res) {
+  try {
+    const response = await getAccessToken(
+      req.body.code,
+      req.body.credentialsId
+    );
+
+    res.json(response);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // This is the server API, where the client can post a received OAuth code.
-app.post("/callback", function(req, res) {
-  getAccessToken(req.body.code)
-    .then(response => getData(response.access_token))
+app.post("/backend/callback", function(req, res) {
+  getData(req.body.accessToken)
     .then(response => {
       res.json({
         response
@@ -64,7 +76,7 @@ async function getData(accessToken) {
   };
 }
 
-async function getAccessToken(code) {
+const getAccessToken = async (code, credentialsId) => {
   const body = {
     code: code,
     client_id: CLIENT_ID, // Your OAuth client identifier.
@@ -83,7 +95,7 @@ async function getAccessToken(code) {
   });
 
   return handleResponse(response);
-}
+};
 
 async function getUserData(token) {
   const response = await fetch(base + "/user", {

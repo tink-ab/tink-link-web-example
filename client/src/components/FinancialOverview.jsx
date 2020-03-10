@@ -6,13 +6,22 @@ import AccountsList from "./AccountsList";
 import Investments from "./Investments";
 import Transactions from "./Transactions";
 
-export const FinancialOverview = ({ data, error, loading }) => {
+export const FinancialOverview = ({ data, error, loading, status }) => {
   if (error) {
-    return <noscript />;
+    return <code>ERROR: {error}</code>;
   }
 
   if (loading) {
-    return <Spinner width="50px" image={"./spinner.png"} />;
+    return (
+      <>
+        {status && (
+          <div style={{ marginBottom: 16 }}>
+            Processing financial data: {status}
+          </div>
+        )}
+        <Spinner width="50px" image={"./spinner.png"} />
+      </>
+    );
   }
 
   if (!data) {

@@ -17,14 +17,19 @@ const getHeaderProps = error =>
       };
 
 export const Callback = ({ location }) => {
-  const { loading, error, data } = useCallback(location);
+  const { loading, error, data, status } = useCallback(location);
   const message = new URLSearchParams(location).get("message");
   const headerProps = getHeaderProps(error);
 
   return (
     <div>
       <Header {...headerProps} />
-      <FinancialOverview loading={loading} data={data} error={error} />
+      <FinancialOverview
+        loading={loading}
+        data={data}
+        error={error}
+        status={status}
+      />
       <p style={{ fontSize: "18px", paddingTop: "40px" }}>{message}</p>
       <Button style={{ margin: "30px" }} href="/">
         Take me back
