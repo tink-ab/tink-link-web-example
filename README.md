@@ -36,7 +36,7 @@ $ npm install
 
 ```
 $ export REACT_APP_CLIENT_ID="<YOUR_CLIENT_ID>"
-$ export REACT_APP_CLIENT_SECRET="<YOUR_CLIENT_SECRET>"
+$ export TINK_CLIENT_SECRET="<YOUR_CLIENT_SECRET>"
 ```
 
 3. Run both the backend (`server.js`) and the frontend (`client` folder) concurrently:
