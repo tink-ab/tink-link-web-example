@@ -5,7 +5,7 @@ const path = require("path");
 const fetch = require("node-fetch");
 
 const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
-const CLIENT_SECRET = process.env.REACT_APP_CLIENT_SECRET;
+const CLIENT_SECRET = process.env.TINK_CLIENT_SECRET;
 
 app.use(express.static(path.join(__dirname, "client/build")));
 app.use(bodyParser.json());
@@ -150,7 +150,7 @@ if (!CLIENT_ID) {
 if (!CLIENT_SECRET) {
   console.log(
     "\x1b[33m%s\x1b[0m",
-    "Warning: REACT_APP_CLIENT_SECRET environment variable not set"
+    "Warning: TINK_CLIENT_SECRET environment variable not set"
   );
 }
 
