@@ -6,7 +6,7 @@
     "bootstrap": "4.4.1",
     "prop-types": "15.7.2",
     "react": "16.12.0",
-    "react-dom": "16.12.0",
+    "react-dom": "16.13.0",
     "react-router-dom": "5.1.2",
     "react-router-prop-types": "^1.0.5",
     "react-scripts": "3.3.1",
