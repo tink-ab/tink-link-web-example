@@ -5,6 +5,7 @@
   ],
   "packageRules": [
     {
+      "matchPaths": ["package.json"],
       "description": "Automatically merge all updates",
       "matchUpdateTypes": ["major", "minor", "patch", "pin", "pinDigest", "digest", "lockFileMaintenance", "rollback", "bump"],
       "automerge": true,
