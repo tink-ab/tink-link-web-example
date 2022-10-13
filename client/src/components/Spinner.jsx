@@ -8,5 +8,3 @@ export const Spinner = ({ image, width }) => (
     alt={"Loading"}
   />
 );
-
-export default Spinner;

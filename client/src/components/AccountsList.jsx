@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { getCurrency } from "../utils/getCurrency";
 import { formatNumber } from "../utils/Format";
 
@@ -38,9 +37,3 @@ export const AccountsList = ({ data }) => {
     </div>
   );
 };
-
-AccountsList.propTypes = {
-  data: PropTypes.object.isRequired
-};
-
-export default AccountsList;

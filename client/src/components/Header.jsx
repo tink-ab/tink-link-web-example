@@ -1,6 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
-import Emoji from "./Emoji";
+import { Emoji } from "./Emoji";
 
 export const Header = ({ emoji, text }) => (
   <div style={{ paddingBottom: "30px" }}>
@@ -8,10 +7,3 @@ export const Header = ({ emoji, text }) => (
     <Emoji type={emoji} />
   </div>
 );
-
-Header.propTypes = {
-  text: PropTypes.string.isRequired,
-  emoji: PropTypes.string
-};
-
-export default Header;

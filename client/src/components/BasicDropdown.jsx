@@ -5,7 +5,6 @@ import {
   DropdownMenu,
   DropdownToggle
 } from "reactstrap";
-import PropTypes from "prop-types";
 
 export const BasicDropdown = ({ items, name, onSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,11 +30,3 @@ export const BasicDropdown = ({ items, name, onSelect }) => {
     </Dropdown>
   );
 };
-
-Dropdown.PropTypes = {
-  items: PropTypes.array.isRequired,
-  name: PropTypes.string.isRequired,
-  onSelect: PropTypes.func.isRequired
-};
-
-export default Dropdown;

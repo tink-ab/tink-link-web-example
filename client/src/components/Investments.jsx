@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { formatNumber } from "../utils/Format";
 
 export const Investments = ({ data }) => {
@@ -52,9 +51,3 @@ export const Investments = ({ data }) => {
     </div>
   );
 };
-
-Investments.propTypes = {
-  data: PropTypes.object.isRequired
-};
-
-export default Investments;

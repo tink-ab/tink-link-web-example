@@ -1,6 +1,5 @@
 import React from "react";
 import { Button } from "reactstrap";
-import ReactRouterPropTypes from "react-router-prop-types";
 import { Header } from "./Header";
 import { FinancialOverview } from "./FinancialOverview";
 import { useCallback } from "../hooks/useCallback";
@@ -32,9 +31,3 @@ export const Callback = ({ location }) => {
     </div>
   );
 };
-
-Callback.propTypes = {
-  location: ReactRouterPropTypes.location.isRequired
-};
-
-export default Callback;

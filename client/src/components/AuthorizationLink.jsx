@@ -1,6 +1,5 @@
 import React from "react";
 import { Button } from "reactstrap";
-import PropTypes from "prop-types";
 
 export const AuthorizationLink = ({ locale, market, scope, ssn }) => {
   const ssnData = ssn ? "&input_username=" + ssn : "";
@@ -19,12 +18,3 @@ export const AuthorizationLink = ({ locale, market, scope, ssn }) => {
 
   return <Button href={link}>Connect Bank</Button>;
 };
-
-AuthorizationLink.propTypes = {
-  ssn: PropTypes.string,
-  scope: PropTypes.string.isRequired,
-  market: PropTypes.string.isRequired,
-  locale: PropTypes.string.isRequired
-};
-
-export default AuthorizationLink;

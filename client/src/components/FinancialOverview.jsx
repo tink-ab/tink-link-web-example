@@ -1,10 +1,9 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Col, Row } from "reactstrap";
-import Spinner from "./Spinner";
-import AccountsList from "./AccountsList";
-import Investments from "./Investments";
-import Transactions from "./Transactions";
+import { Spinner } from "./Spinner";
+import { AccountsList } from "./AccountsList";
+import { Investments } from "./Investments";
+import { Transactions } from "./Transactions";
 
 export const FinancialOverview = ({ data, error, loading }) => {
   if (error) {
@@ -29,11 +28,3 @@ export const FinancialOverview = ({ data, error, loading }) => {
     </Row>
   );
 };
-
-FinancialOverview.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  data: PropTypes.object,
-  error: PropTypes.string
-};
-
-export default FinancialOverview;
