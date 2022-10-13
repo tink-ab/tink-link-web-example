@@ -1,8 +1,7 @@
 import React from "react";
 import { Button } from "reactstrap";
 
-export const AuthorizationLink = ({ locale, market, scope, ssn }) => {
-  const ssnData = ssn ? "&input_username=" + ssn : "";
+export const AuthorizationLink = ({ locale, market, scope }) => {
   const link =
     "https://link.tink.com/1.0/authorize/?" +
     "client_id=" +
