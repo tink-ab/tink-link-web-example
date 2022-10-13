@@ -3,6 +3,7 @@
   "extends": [
     "config:base"
   ],
+  "dependencyDashboard": true,
   "packageRules": [
     {
       "matchPaths": ["package.json"],
