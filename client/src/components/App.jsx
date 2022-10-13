@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Col, Container, Row } from "reactstrap";
 import { Callback } from "./Callback";
 import { Main } from "./Main";
@@ -25,10 +25,12 @@ export const App = () => (
     </Row>
     <Row className="app">
       <Col lg={{ size: 8, offset: 2 }} style={{ paddingTop: "70px" }}>
-        <Switch>
-          <Route exact path="/" component={Main} />
-          <Route exact path="/callback" component={Callback} />
-        </Switch>
+        <BrowserRouter>
+          <Routes>
+            <Route exact path="/" element={<Main/>} />
+            <Route exact path="/callback" element={<Callback/>} />
+          </Routes>
+        </BrowserRouter>
       </Col>
     </Row>
   </Container>
