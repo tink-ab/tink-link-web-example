@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { getCurrency } from "../utils/getCurrency";
 import { formatNumber, formatDate } from "../utils/Format";
 
@@ -38,7 +37,7 @@ export const Transactions = ({ data }) => {
         <br />
         {formatNumber(transaction.amount)} {currency}
         <br />
-        {category.primaryName}
+        {category?.primaryName}
       </p>
     );
   });
@@ -50,9 +49,3 @@ export const Transactions = ({ data }) => {
     </div>
   );
 };
-
-Transactions.propTypes = {
-  data: PropTypes.object.isRequired
-};
-
-export default Transactions;

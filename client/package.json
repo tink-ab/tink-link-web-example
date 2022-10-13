@@ -4,14 +4,10 @@
   "private": true,
   "dependencies": {
     "bootstrap": "5.2.2",
-    "prop-types": "15.8.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-router-dom": "6.4.2",
-    "react-router-prop-types": "1.0.5",
-    "react-scripts": "5.0.1",
-    "react-transition-group": "4.4.5",
-    "reactstrap": "9.1.4"
+    "react-transition-group": "4.4.5"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -20,7 +16,9 @@
     "eject": "react-scripts eject"
   },
   "proxy": "http://localhost:8080/",
-  "devDependencies": {},
+  "devDependencies": {
+    "react-scripts": "5.0.1"
+  },
   "browserslist": [
     ">0.2%",
     "not dead",

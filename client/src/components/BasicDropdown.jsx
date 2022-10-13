@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle
-} from "reactstrap";
-import PropTypes from "prop-types";
+
 
 export const BasicDropdown = ({ items, name, onSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,23 +13,14 @@ export const BasicDropdown = ({ items, name, onSelect }) => {
   }, [value, onSelect]);
 
   const dropdownItems = items.map(item => (
-    <DropdownItem onClick={select} key={item}>
+    <option onClick={select} key={item}>
       {item}
-    </DropdownItem>
+    </option>
   ));
 
   return (
-    <Dropdown isOpen={isOpen} toggle={toggle}>
-      <DropdownToggle caret>{value}</DropdownToggle>
-      <DropdownMenu>{dropdownItems}</DropdownMenu>
-    </Dropdown>
+    <select isOpen={isOpen} toggle={toggle}>
+      {dropdownItems}
+    </select>
   );
 };
-
-Dropdown.PropTypes = {
-  items: PropTypes.array.isRequired,
-  name: PropTypes.string.isRequired,
-  onSelect: PropTypes.func.isRequired
-};
-
-export default Dropdown;
