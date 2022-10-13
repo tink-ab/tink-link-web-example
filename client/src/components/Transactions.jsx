@@ -37,7 +37,7 @@ export const Transactions = ({ data }) => {
         <br />
         {formatNumber(transaction.amount)} {currency}
         <br />
-        {category.primaryName}
+        {category?.primaryName}
       </p>
     );
   });

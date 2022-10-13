@@ -15,8 +15,8 @@ const getHeaderProps = error =>
         emoji: "tada"
       };
 
-export const Callback = ({ location }) => {
-  const { loading, error, data } = useCallback(location);
+export const Callback = () => {
+  const { loading, error, data } = useCallback(window.location);
   const message = new URLSearchParams(location).get("message");
   const headerProps = getHeaderProps(error);
 
