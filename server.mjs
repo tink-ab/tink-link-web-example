@@ -1,9 +1,14 @@
-const express = require("express");
-const app = express();
-const bodyParser = require("body-parser");
-const path = require("path");
-const fetch = require("node-fetch");
+import express from "express";
+import bodyParser from "body-parser";
+import path from "path";
+import fetch from "node-fetch";
+import { fileURLToPath } from 'url';
 
+const __filename = fileURLToPath(import.meta.url);
+
+const __dirname = path.dirname(__filename);
+
+const app = express();
 const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
 const CLIENT_SECRET = process.env.TINK_CLIENT_SECRET;
 
