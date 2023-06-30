@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Tink Link Web Example</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script type="module" src="/static/index.js"></script>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="site-header">
+        <div class="circle"></div>
+        <h2 class="site-title"><a href="/">Example</a></h2>
+      </div>
+    </header>
+    <div class="intro">
+      <h1>Hello!</h1>
+      <span role="presentation">💰</span>
+      <p>We can help you analyze your financial status.</p>
+      <p>Connect your bank to see your accounts and transactions!</p>
+
+      <form class="form mt-2" method="GET" action="https://link.tink.com/1.0/transactions/connect-accounts">
+        <div class="mb-1">
+          <label for="market">Market</label>
+          <select name="market" id="market">
+            <option value="AT">Austria</option>
+            <option value="BE">Belgium</option>
+            <option value="DK">Denmark</option>
+            <option value="EE">Estonia</option>
+            <option value="FI">Finland</option>
+            <option value="FR">France</option>
+            <option value="DE">Germany</option>
+            <option value="IE">Ireland</option>
+            <option value="IT">Italy</option>
+            <option value="LV">Latvia</option>
+            <option value="LT">Lithuania</option>
+            <option value="NL">Netherlands</option>
+            <option value="NO">Norway</option>
+            <option value="PL">Poland</option>
+            <option value="PT">Portugal</option>
+            <option value="ES">Spain</option>
+            <option value="SE" selected>Sweden</option>
+            <option value="GB">United Kingdom</option>
+          </select>
+        </div>
+
+        <div class="mb-1">
+          <label for="locale">Language</label>
+          <select name="locale" id="locale">
+            <option value="da_DK">Danish</option>
+            <option value="de_DE">German</option>
+            <option value="et_EE">Estonian</option>
+            <option value="en_US" selected>English</option>
+            <option value="es_ES">Spanish</option>
+            <option value="fi_FI">Finnish</option>
+            <option value="fr_FR">French</option>
+            <option value="it_IT">Italian</option>
+            <option value="lt_LT">Lithuanian</option>
+            <option value="lv_LV">Latvian</option>
+            <option value="nl_NL">Dutch</option>
+            <option value="no_NO">Norwegian</option>
+            <option value="pt_PT">Portuguese</option>
+            <option value="pl_PL">Polish</option>
+            <option value="sv_SE">Swedish</option>
+          </select>
+        </div>
+
+        <input type="hidden" name="client_id" value="<TINK_CLIENT_ID>" />
+        <input type="hidden" name="redirect_uri" value="http://localhost:3000/callback" />
+
+        <button class="btn">Connect bank</button>
+      </form>
+    </div>
+  
+    <div class="results hidden">
+      <div id="accounts">
+        <h2>Accounts</h2>
+      </div>
+      <div id="transactions">
+        <h2>Transactions</h2>
+      </div>
+    </div>
+  </div>
+
+  <template id="tpl-transaction">
+    <li class="transaction">
+      <div class="row space-between">
+        <div class="transaction__description"></div>
+        <div>
+          <span class="transaction__amount"></span>
+          <span class="transaction__currency"></span>
+        </div>
+      </div>
+      <div class="row space-between">
+        <span class="transaction__date"></span>
+        <span class="transaction__category badge"></span>
+      </div>
+      <details>
+        <summary>details</summary>
+        <pre class="transaction__json"></pre>
+      </details>
+    </li>
+  </template>
+
+  <template id="tpl-account">
+    <li class="account card">
+      <div class="account__balance"></div>
+      <div class="account__type badge"></div>
+      <div class="account__footer">
+        <div class="account__name text-truncate"></div>
+        <div class="account__number text-truncate"></div>
+      </div>
+    </li>
+  </template>
+
+</body>
+
+</html>
