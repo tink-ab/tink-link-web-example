@@ -5,20 +5,12 @@
   "repository": "github:tink-ab/tink-connect-example",
   "main": "server.js",
   "scripts": {
-    "client": "cd client && npm start",
-    "server": "node server.mjs",
-    "dev": "concurrently --kill-others-on-fail \"nodemon server.js\" \"npm run client\"",
-    "postinstall": "cd client && npm install"
+    "start": "TINK_CLIENT_SECRET= TINK_CLIENT_ID= node server.mjs"
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "body-parser": "1.20.1",
-    "concurrently": "7.6.0",
-    "express": "4.18.2",
-    "node-fetch": "^3.0.0"
-  },
-  "devDependencies": {
-    "nodemon": "2.0.20"
+  "engines": {
+    "node": "18"
   }
 }
+
