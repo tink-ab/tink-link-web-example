@@ -1,166 +1,121 @@
-import express from "express";
-import bodyParser from "body-parser";
-import path from "path";
-import fetch from "node-fetch";
-import { fileURLToPath } from 'url';
+import http from 'node:http';
+import fs from 'node:fs';
+import path, { parse } from 'node:path';
+import url, { URL, URLSearchParams } from 'node:url';
 
-const __filename = fileURLToPath(import.meta.url);
-
-const __dirname = path.dirname(__filename);
-
-const app = express();
-const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+const CLIENT_ID = process.env.TINK_CLIENT_ID;
 const CLIENT_SECRET = process.env.TINK_CLIENT_SECRET;
 
-app.use(express.static(path.join(__dirname, "client/build")));
-app.use(bodyParser.json());
-
-// Needed to make client-side routing work in production.
-app.get("/*", function(req, res) {
-  res.sendFile(path.join(__dirname, "client/build", "index.html"));
-});
-
-const base = "https://api.tink.se/api/v1";
-
-// This is the server API, where the client can post a received OAuth code.
-app.post("/callback", function(req, res) {
-  getAccessToken(req.body.code)
-    .then(response => getData(response.access_token))
-    .then(response => {
-      res.json({
-        response
-      });
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({ message: err.toString() });
-    });
-});
-
-async function handleResponse(response) {
-  const json = await response.json();
-  if (response.status !== 200) {
-    throw new Error(json.errorMessage);
-  }
-  return json;
-}
-
-async function getData(accessToken) {
-  const [
-    categoryData,
-    userData,
-    accountData,
-    investmentData,
-    transactionData
-  ] = await Promise.all([
-    getCategoryData(accessToken),
-    getUserData(accessToken),
-    getAccountData(accessToken),
-    getInvestmentData(accessToken),
-    getTransactionData(accessToken)
-  ]);
-
-  return {
-    categoryData,
-    userData,
-    accountData,
-    investmentData,
-    transactionData
-  };
-}
-
-async function getAccessToken(code) {
-  const body = {
-    code: code,
-    client_id: CLIENT_ID, // Your OAuth client identifier.
-    client_secret: CLIENT_SECRET, // Your OAuth client secret. Always handle the secret with care.
-    grant_type: "authorization_code"
-  };
-
-  const response = await fetch(base + "/oauth/token", {
-    method: "POST",
-    body: Object.keys(body)
-      .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(body[key]))
-      .join("&"),
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
-    }
-  });
-
-  return handleResponse(response);
-}
-
-async function getUserData(token) {
-  const response = await fetch(base + "/user", {
-    headers: {
-      Authorization: "Bearer " + token
-    }
-  });
-
-  return handleResponse(response);
-}
-
-async function getAccountData(token) {
-  const response = await fetch(base + "/accounts/list", {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + token
-    }
-  });
-
-  return handleResponse(response);
-}
-
-async function getInvestmentData(token) {
-  const response = await fetch(base + "/investments", {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + token
-    }
-  });
-
-  return handleResponse(response);
-}
-
-async function getTransactionData(token) {
-  const response = await fetch(base + "/search", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + token
-    },
-    body: JSON.stringify({ limit: 5 })
-  });
-
-  return handleResponse(response);
-}
-
-async function getCategoryData(token) {
-  const response = await fetch(base + "/categories", {
-    headers: {
-      Authorization: "Bearer " + token
-    }
-  });
-
-  return handleResponse(response);
-}
-
 if (!CLIENT_ID) {
-  console.log(
-    "\x1b[33m%s\x1b[0m",
-    "Warning: REACT_APP_CLIENT_ID environment variable not set"
-  );
+  console.error('Missing "TINK_CLIENT_ID"');
+  process.exit(1);
 }
 
 if (!CLIENT_SECRET) {
-  console.log(
-    "\x1b[33m%s\x1b[0m",
-    "Warning: TINK_CLIENT_SECRET environment variable not set"
-  );
+  console.error('Missing "TINK_CLIENT_SECRET"');
+  process.exit(1);
 }
 
-// Start the server.
-const port = 8080;
-app.listen(port, function() {
-  console.log("Tink example app listening on port " + port);
+const hostname = 'localhost';
+const port = 3000;
+
+const apiUrl = 'https://api.tink.com';
+
+function respondWithError(res, err) {
+  res.writeHead(500, { 'Content-Type': 'application/json' }).end(JSON.stringify({
+    error: err.message,
+  }));
+}
+
+function respondWithJson(res, data) {
+  res.writeHead(200, { 'Content-Type': 'application/json' }).end(JSON.stringify(data)); 
+}
+
+async function parseResponse(res) {
+  if (!res.ok) {
+    throw new Error(`Request failed with "${res.status}"`);
+  }
+
+  const data = await res.json();
+  return data;
+}
+
+function serveStaticContent(req, res) {
+  const p = path.join(__dirname,'.',req.url);
+  const contentType = req.url.endsWith('.js') ? 'text/javascript' : 'text/css';
+  res.setHeader('Content-Type', contentType);
+
+  var stream = fs.createReadStream(p);
+  stream.on('error', () => {
+    res.writeHead(404, { 'Content-Type': 'text/plain' }).end();
+  });
+
+  stream.pipe(res);
+}
+
+async function fetchAccessToken(code) {
+  const body = new URLSearchParams({
+    code: code,
+    client_id: CLIENT_ID, // Your OAuth client identifier.
+    client_secret: CLIENT_SECRET, // Your OAuth client secret. Always handle the secret with care.
+    grant_type: 'authorization_code'
+  });
+
+  const res = await fetch(`${apiUrl}/api/v1/oauth/token`, {
+    method: 'POST',
+    body,
+  });
+
+  return parseResponse(res);
+}
+
+async function authenticatedApiProxyHandler(req, res, parsedUrl) {
+  const apiPath = parsedUrl.pathname.replace('/api-proxy', '');
+  const response = await fetch(`${apiUrl}${apiPath}`, {
+    method: req.method,
+    headers: {
+      Authorization: req.headers.authorization
+    },
+  });
+
+  return parseResponse(response);
+}
+
+const server = http.createServer(async (req, res) => {
+  console.info(`${req.method}: `, req.url);
+  const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
+
+  if (parsedUrl.pathname.endsWith('/api/v1/oauth/token') && req.method === 'POST') {
+    const codeParam = parsedUrl.searchParams.get('code');
+    try {
+      if (!codeParam) {
+        throw new Error('Missing required parameter "code"');
+      }
+      const response = await fetchAccessToken(codeParam);
+      respondWithJson(res, response);
+    } catch (err) {
+      respondWithError(res, err);
+    }
+  }
+
+  if (parsedUrl.pathname.startsWith('/api-proxy')) {
+    try {
+      const response = await authenticatedApiProxyHandler(req, res, parsedUrl);
+      respondWithJson(res, response);
+    } catch (err) {
+      respondWithError(res, err);
+    }
+  }
+
+  if (req.url.indexOf('/static') === 0) {
+    return serveStaticContent(req, res);
+  }
+
+  res.writeHead(200, { 'content-type': 'text/html' });
+  fs.createReadStream('index.html').pipe(res);
+});
+
+server.listen(port, hostname, () => {
+  console.log(`Server running at http://${hostname}:${port}/`);
 });
